@@ -26,10 +26,6 @@ public class Main {
   public static Function<Step002, Step003> serviceC() { return (step002) -> new Step003(step002.timestamp01 , step002.timestamp02 , now());}
 
   //Demo for some classes
-  public static class WorkingUnit {
-    private String finalValue;
-  }
-
   public static class Step001 {
     private final LocalDateTime timestamp01;
 
