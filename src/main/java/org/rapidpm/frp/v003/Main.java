@@ -66,7 +66,7 @@ public class Main {
 
   public static Function<Result<String>, Result<Step003>> workflow = (input) ->
       input
-          .or(() -> Result.success("nooop")) // default per definition here -> convert failure´s
+          .or(() -> Result.success("nooop")) // default per demo definition here -> convert failure´s
           .thenCombine(
               serviceA() ,
               (value , supplier) -> Result.success(supplier.get()) // not working with value, to make it simple
