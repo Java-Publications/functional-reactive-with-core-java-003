@@ -101,10 +101,8 @@ public class Main {
           return result;
         });
 
-
     // service will be invoked
     modifiedWorkflow.apply(service.doWork("Hello World"));
-
 
   }
 
