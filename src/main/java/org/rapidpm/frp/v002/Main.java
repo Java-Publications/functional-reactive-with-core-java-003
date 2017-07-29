@@ -1,8 +1,8 @@
 package org.rapidpm.frp.v002;
 
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.rapidpm.frp.model.Pair;
@@ -34,10 +34,12 @@ public class Main {
 
 
     final Service service = input -> (Objects.nonNull(input))
-                                            ? Result.success(input.toUpperCase())
-                                            : Result.failure("Value was null");
-    service
-        .doWork("Hello World")
+                                     ? Result.success(input.toUpperCase())
+                                     : Result.failure("Value was null");
+
+    final Result<String> helloWorld = service.doWork("Hello World");
+
+    helloWorld
         .thenCombine(System::nanoTime ,
                      (BiFunction<String, Supplier<Long>, Result<Pair<String, Long>>>)
                          (s , longSupplier) -> Result.success(new Pair<>(s , longSupplier.get())))
@@ -47,12 +49,24 @@ public class Main {
         );
 
 
+    helloWorld
+        .map(s -> new Pair<>(s , System.nanoTime()))
+        .ifPresentOrElse(
+            value -> System.out.println(" value present = " + value) ,
+            errormessage -> System.out.println(" value not present error message is = " + errormessage)
+        );
 
 
+    final Consumer<Result<Pair<String, Long>>> resultConsumer = (result) ->
+        result
+            .ifPresentOrElse(
+                value -> System.out.println(" value present = " + value) ,
+                errormessage -> System.out.println(" value not present error message is = " + errormessage));
 
 
-
+    resultConsumer.accept(helloWorld.map(s -> new Pair<>(s , System.nanoTime())));
 
   }
+
 
 }
